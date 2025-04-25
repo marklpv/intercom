@@ -1,0 +1,12 @@
+*
+!/**/
+!*.* 
+!vmsg/alarm.mp3
+!vmsg/godown.mp3
+
+venv/*
+
+*.tar
+*.gz
+*.zip
+*.mp4
