@@ -17,7 +17,17 @@ def play_vmsg():
     else:
         return "No audio file found.", 400
     os.system(f"mpg123 {filepath}")
-    return "Played", 200
+    return "Audio has been played.", 200
+
+@app.route("/vmsg/uploads", methods=["POST"])
+def upload_vmsg():
+    if not request.files:
+        return "No audio file uploaded", 400
+    audio_file = request.files["audio"]
+    filename = f"{request.form['filename']}.mp3"
+    filepath = os.path.join(VMSG_FOLDER,filename)
+    audio_file.save(filepath)
+    return "Voice message uploaded.", 200
 
 
 if __name__ == "__main__":

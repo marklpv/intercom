@@ -5,7 +5,7 @@
 !vmsg/godown.mp3
 
 venv/*
-
+*.mp3
 *.tar
 *.gz
 *.zip
