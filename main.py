@@ -1,23 +1,35 @@
 from flask import Flask, request
 import os
 
+
 app = Flask(__name__)
 
-VMSG_FOLDER = "vmsg"
+VMSG_FOLDER = "/home/marklpv/Projects/intercom/vmsg"
 
 @app.route("/vmsg", methods=["POST"])
 def play_vmsg():
     vmsg = request.form["vmsg"]
-    filename = f"{vmsg}"
-    filepath = os.path.join(VMSG_FOLDER,filename)
-    if os.path.isfile(f"{filepath}.mp3"):
-        filepath = f"{filepath}.mp3"
-    elif os.path.isfile(f"{filepath}.wav"):
-        filepath = f"{filepath}.wav"
+
+    if vmsg == 'realtime':
+        if not request.files:
+            return "No audio file uploaded", 400
+        audio_file = request.files["file"]
+        filename = f"realtime_vmsg.m4a"
+        filepath = os.path.join(VMSG_FOLDER,filename)
+        audio_file.save(filepath)
+        os.system(f"ffplay -nodisp -autoexit {filepath}")
+        return "Audio has been played.", 200
     else:
-        return "No audio file found.", 400
-    os.system(f"mpg123 {filepath}")
-    return "Audio has been played.", 200
+        filename = f"{vmsg}"
+        filepath = os.path.join(VMSG_FOLDER,filename)
+        if os.path.isfile(f"{filepath}.mp3"):
+            filepath = f"{filepath}.mp3"
+        elif os.path.isfile(f"{filepath}.wav"):
+            filepath = f"{filepath}.wav"
+        else:
+            return "No audio file found.", 400
+        os.system(f"mpg123 -o alsa {filepath}")
+        return "Audio has been played.", 200
 
 @app.route("/vmsg/uploads", methods=["POST"])
 def upload_vmsg():

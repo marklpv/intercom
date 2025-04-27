@@ -5,6 +5,8 @@
 !vmsg/godown.mp3
 
 venv/*
+systemd/*
+logs/*
 *.mp3
 *.tar
 *.gz
